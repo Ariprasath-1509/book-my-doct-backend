@@ -4,109 +4,59 @@ import com.bookmydoct.notification.service.EmailService;
 import com.bookmydoct.notification.service.OtpService;
 import com.bookmydoct.notification.service.SmsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * In-memory OTP store (replaces Redis). Suitable for MVP — OTPs are lost on restart,
+ * which is acceptable since registration OTP sending is disabled and accounts activate
+ * immediately.
+ */
 @Service
 @RequiredArgsConstructor
 public class OtpServiceImpl implements OtpService {
 
-    private final StringRedisTemplate redisTemplate;
-
     private final EmailService emailService;
-
     private final SmsService smsService;
 
-    private static final long OTP_EXPIRY_MINUTES = 10;
+    private final ConcurrentHashMap<String, String> otpStore = new ConcurrentHashMap<>();
+    private static final Random RANDOM = new Random();
 
     @Override
     public void sendEmailOtp(String email) {
-
         String otp = generateOtp();
-
-        redisTemplate.opsForValue().set(
-                "email-otp:" + email,
-                otp,
-                OTP_EXPIRY_MINUTES,
-                TimeUnit.MINUTES
-        );
-
-        redisTemplate.opsForValue().set(
-                "email-otp-resend:" + email,
-                "LOCKED",
-                1,
-                TimeUnit.MINUTES
-        );
-
-        emailService.sendEmail(
-                email,
-                "BookMyDoct Email Verification OTP",
-                "Your OTP is: " + otp
-        );
+        otpStore.put("email-otp:" + email, otp);
+        emailService.sendEmail(email, "BookMyDoct Email Verification OTP", "Your OTP is: " + otp);
     }
 
     @Override
     public void sendMobileOtp(String mobileNumber) {
-        
         String otp = generateOtp();
-
-        redisTemplate.opsForValue().set(
-                "mobile-otp:" + mobileNumber,
-                otp,
-                OTP_EXPIRY_MINUTES,
-                TimeUnit.MINUTES
-        );
-
+        otpStore.put("mobile-otp:" + mobileNumber, otp);
         smsService.sendOtpSms(mobileNumber, otp);
     }
 
     @Override
     public boolean verifyEmailOtp(String email, String otp) {
-
         String key = "email-otp:" + email;
-
-        String storedOtp = redisTemplate.opsForValue().get(key);
-
-        if (storedOtp == null) {
-            return false;
-        }
-
-        if (!storedOtp.equals(otp)) {
-            return false;
-        }
-
-        redisTemplate.delete(key);
-
+        String stored = otpStore.get(key);
+        if (stored == null || !stored.equals(otp)) return false;
+        otpStore.remove(key);
         return true;
     }
 
     @Override
     public boolean verifyMobileOtp(String mobileNumber, String otp) {
-
         String key = "mobile-otp:" + mobileNumber;
-
-        String storedOtp = redisTemplate.opsForValue().get(key);
-
-        if (storedOtp == null) {
-            return false;
-        }
-
-        if (!storedOtp.equals(otp)) {
-            return false;
-        }
-
-        redisTemplate.delete(key);
-
+        String stored = otpStore.get(key);
+        if (stored == null || !stored.equals(otp)) return false;
+        otpStore.remove(key);
         return true;
     }
 
     private String generateOtp() {
-
-        return String.valueOf(
-                100000 +
-                        new java.util.Random()
-                                .nextInt(900000));
+        return String.valueOf(100000 + RANDOM.nextInt(900000));
     }
 }
