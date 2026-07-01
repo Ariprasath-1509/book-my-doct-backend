@@ -1,0 +1,26 @@
+package com.bookmydoct.review.data.dto.request;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+import java.util.UUID;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class CreateReviewRequest {
+
+    @NotNull(message = "Appointment UUID is required")
+    private UUID appointmentUuid;
+
+    @NotNull(message = "Rating is required")
+    @Min(value = 1, message = "Rating must be at least 1")
+    @Max(value = 5, message = "Rating cannot exceed 5")
+    private Integer rating;
+
+    private String review;
+}

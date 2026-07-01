@@ -1,0 +1,46 @@
+${AnsiColor.BRIGHT_YELLOW}
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                            ║
+║      ♥━━━━━━━♥                                  ♥━━━━━━━♥                                  ♥━━━━━━━♥      ║
+║                                                                                                            ║
+║         ██████╗  ██████╗  ██████╗████████╗ ██████╗ ██████╗ ██╗                         🩺                ║
+║         ██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██║                         ♥                 ║
+║         ██║  ██║██║   ██║██║        ██║   ██║   ██║██████╔╝██║                    Healthcare             ║
+║         ██║  ██║██║   ██║██║        ██║   ██║   ██║██╔══██╗██║                     Platform              ║
+║         ██████╔╝╚██████╔╝╚██████╗   ██║   ╚██████╔╝██║  ██║██║                         ♥                 ║
+║         ╚═════╝  ╚═════╝  ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝                         🩺                ║
+║                                                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+${AnsiColor.BRIGHT_WHITE}
+                                   HEALTHCARE APPOINTMENT PLATFORM
+
+${AnsiColor.RED}
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                                            ║
+║  🖥  Application        :  Book-My-Doct                                                                    ║
+║  📦 Version            :  1.0.0                                                                           ║
+║  ☕ Java Version       :  ${java.version}                                                                 ║
+║  🌐 Server Port        :  ${server.port}                                                                  ║
+║  🚀 Active Profile     :  ${spring.profiles.active}                                                       ║
+║  📚 Spring Boot        :  3.x                                                                             ║
+║  🗄  Database          :  MySQL                                                                           ║
+║  🔒 Security           :  Spring Security + JWT                                                           ║
+║  📖 API Docs           :  http://localhost:${server.port}/swagger-ui/index.html                           ║
+║                                                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+${AnsiColor.BRIGHT_BLUE}
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+${AnsiColor.BRIGHT_GREEN}
+                    ✔ Application Started Successfully ✔
+
+${AnsiColor.BRIGHT_CYAN}
+                  Better Healthcare • Better Tomorrow
+
+${AnsiColor.BRIGHT_YELLOW}
+          "Connecting Patients and Doctors with Secure Digital Healthcare"
+
+${AnsiColor.BRIGHT_MAGENTA}
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
